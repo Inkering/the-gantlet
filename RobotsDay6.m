@@ -19,7 +19,7 @@ coefficients = pca([x y]);
 m = coefficients(2,1) / coefficients(1,1)
 b = mean(y) - m * mean(x)
 pcay = polyval([m b], x);
-plot(x, pcay, 'r--')
+plot(x, pcay, 'r')
 
 clearvars -except x y
 
