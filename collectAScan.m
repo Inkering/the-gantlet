@@ -24,9 +24,28 @@ scan_message = receive(sub);
 r_4 = scan_message.Ranges(1:end-1);
 theta_4 = [0:359]';
 
+input('move the robot to a 5th location'); % Wait for key press
+
+scan_message = receive(sub);
+r_5 = scan_message.Ranges(1:end-1);
+theta_5 = [0:359]';
+
+input('move the robot to a 6th location'); % Wait for key press
+
+scan_message = receive(sub);
+r_6 = scan_message.Ranges(1:end-1);
+theta_6 = [0:359]';
+
+input('move the robot to a 7th location'); % Wait for key press
+
+scan_message = receive(sub);
+r_7 = scan_message.Ranges(1:end-1);
+theta_7 = [0:359]';
+
+
 % Gently shove everything into a matrix (you can use the matrix or the
 % individual r_x and theta_x variables
-r_all = [r_1 r_2 r_3 r_4];
-theta_all = [theta_1 theta_2 theta_3 theta_4];
+r_all = [r_1 r_2 r_3 r_4 r_5 r_6 r_7];
+theta_all = [theta_1 theta_2 theta_3 theta_4 theta_5 theta_6 theta_7];
 
-save('rall.mat','r_all')
+save('rall2.mat','r_all')
