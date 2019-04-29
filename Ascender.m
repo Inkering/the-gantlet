@@ -14,7 +14,8 @@ plot(r(1), r(2),'o')
 end
 
 function output = plsascend(r, f)
-% performs an ascent, locking
+% performs an ascent, locking function
+% in order to make it a descent, go the opposite way!
 
 % setup a publisher
 pub = rospublisher('/raw_vel');
