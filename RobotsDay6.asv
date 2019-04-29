@@ -26,18 +26,16 @@ clearvars -except x y
 
 points = [x y];
 
-n = 50;
+n = 80;
 d = 0.1;
 
 bestInliersSoFar = 0;
 bestPoint1SoFar = [0 0];
 bestPoint2SoFar = [0 0];
 bestTestLineSoFar = [];
-bestMatchedPoints = [];
 
 % For each point pair
 for i = 1:n
-    matchedPoints = [];
     % Randomly select the points
     point1 = points(randi([1, length(points)]),:);
     point2 = points(randi([1, length(points)]),:);
@@ -52,33 +50,31 @@ for i = 1:n
     plot(point2(1), point2(2), 'cyano', 'HandleVisibility', 'off')
     
     % Find the tangent vector
-    That = (point2 - point1) ./ vecnorm(point2 - point1);
+%     That = (point2 - point1) ./ vecnorm(point2 - point1);
     % Find the normal vector
-    Nhat = ([-That(2) That(1)]);
+%     Nhat = ([-That(2) That(1)]);
     
     inliers = 0;
     
     % Test every point with this fit line
     for j = 1:length(points)
 
-        r = points(j,:) - point1;
+%         r = points(j,:) - point1;
         
         a = point1 - point2;
         a(3) = 0;
         b = points(j,:) - point2;
         b(3) = 0;
-%         dist = norm(cross(a,b)) / norm(a);
+        dist = norm(cross(a,b)) / norm(a)
         
-        dist = dot(r,Nhat)
+%         dist = dot(r,Nhat)
         
-        if abs(dist) <= d
+        if dist <= d
             inliers = inliers + 1;
-            matchedPoints(end+1,:) = points(j,:);
         end
     end
     
     if inliers > bestInliersSoFar
-        bestMatchedPoints = matchedPoints;
         bestPoint1SoFar = point1;
         bestPoint2SoFar = point2;
         bestTestLineSoFar = testline;
@@ -93,8 +89,6 @@ end
 
 plot(x, testline, 'cyan')
 plot(x, testline, 'r*')
-
-plot(bestMatchedPoints(:,1), bestMatchedPoints(:,2), 'gs')
 
 legend('Dataset', 'Linear Regression', 'PCA Fit', 'Fit Lines Tested', 'RANSAC Fit Line')
 
