@@ -26,7 +26,7 @@ clearvars -except x y
 
 points = [x y];
 
-n = 50;
+n = 8;
 d = 0.1;
 
 bestInliersSoFar = 0;
@@ -45,6 +45,7 @@ for i = 1:n
     % Find and plot the line between them
     p = polyfit([point1(1) point2(1)], [point1(2) point2(2)], 1);
     testline = polyval(p, x);
+    
     plot(x, testline, 'cyan', 'HandleVisibility', 'off')
     
     % Plot the endpoints in cyan
@@ -69,7 +70,7 @@ for i = 1:n
         b(3) = 0;
 %         dist = norm(cross(a,b)) / norm(a);
         
-        dist = dot(r,Nhat)
+        dist = dot(r,Nhat);
         
         if abs(dist) <= d
             inliers = inliers + 1;
