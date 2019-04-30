@@ -57,12 +57,20 @@ for i = 1:n
     % Find the normal vector
     Nhat = ([-That(2) That(1)]);
     
+    A = point1;
+    B = point2;
+    
+    That = [B(1) - A(1);B(2) - A(2);0]./vecnorm([B(1) - A(1);B(2) - A(2);0]);
+    Khat = [0;0;1];
+    Nhat = cross(That,Khat);
+    
     inliers = 0;
     
     % Test every point with this fit line
     for j = 1:length(points)
 
         r = points(j,:) - point1;
+        r(3) = 0;
         
         a = point1 - point2;
         a(3) = 0;
@@ -98,17 +106,3 @@ plot(x, testline, 'r*')
 plot(bestMatchedPoints(:,1), bestMatchedPoints(:,2), 'gs')
 
 legend('Dataset', 'Linear Regression', 'PCA Fit', 'Fit Lines Tested', 'RANSAC Fit Line')
-
-
-
-
-
-
-
-
-
-
-
-
-
-
