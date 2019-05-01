@@ -18,7 +18,7 @@ function output = plsascend(r, f)
 % in order to make it a descent, go the opposite way!
 
 % setup a publisher
-pub = rospublisher('/raw_vel');
+% pub = rospublisher('/raw_vel');
 message = rosmessage(pub);   
 
 % find our gradient and scale
@@ -36,22 +36,22 @@ orientation = grad./norm(grad);
 
 % perform initial rotation
 time = 2*angle/(pi / 2);
-message.Data = [-.1,.1];
-send(pub, message);
+% message.Data = [-.1,.1];
+% send(pub, message);
 pause(time);
-message.Data = [0,0];
-send(pub,message);
+% message.Data = [0,0];
+% send(pub,message);
 
 % stop when the norm of the gradient is greater than tolerance
 while norm(grad) > tolerance
     norm(grad)
     %move distance lambda along gradient
     time = (lambda/3.281)/0.1;
-    message.Data = [.1,.1];
-    send(pub, message);
+%     message.Data = [.1,.1];
+%     send(pub, message);
     pause(time);
-    message.Data = [0,0];
-    send(pub,message);
+%     message.Data = [0,0];
+%     send(pub,message);
     
     %calculate new position
     r = r + lambda*grad./norm(grad);
@@ -69,16 +69,16 @@ while norm(grad) > tolerance
     
     %rotate said angle
     time = 2*angle/1.5748;
-    message.Data = [-.1,.1];
-    send(pub, message);
+%     message.Data = [-.1,.1];
+%     send(pub, message);
     pause(time);
-    message.Data = [0,0];
-    send(pub,message);
+%     message.Data = [0,0];
+%     send(pub,message);
     plot(r(1), r(2),'o')
 end
 
 % stop moving, we're done!
-message.Data = [0,0];
-send(pub,message);
+% message.Data = [0,0];
+% send(pub,message);
 
 end
