@@ -1,4 +1,4 @@
-function output = gradGenerator(xp, yp)
+function [gx,gy] = gradGenerator(xp, yp)
 % generate the gradient for a particular robot position
 
 % generate a smol mesh just for the imediate area surrounding gradient
@@ -13,7 +13,7 @@ for i=1:xlim
         line = @(x0,m,xi,yi) log(sqrt((px(i,j)-x0-xi).^2 + ((py(i,j)-(m.*x0)-yi).^2)));
         
         % define equation of a circle
-        round = @(xi,yi) log(sqrt((px(i,j)-xi).^2 + ((py(i,j)-yi).^2)));
+%         round = @(xi,yi) log(sqrt((px(i,j)-xi).^2 + ((py(i,j)-yi).^2)));
         
         % define potentials for some lines
         dV2 = @(x0)line(x0, 0.01,1,0);
@@ -27,17 +27,19 @@ for i=1:xlim
 end
 
 % plotting options
-figure()
-hold off
-contour3(px,py,V)
+% figure()
+% hold off
+% contour(px,py,V)
 %surf(px,py,V)
 
 % get gradient
 [Ex,Ey] = gradient(V);
-hold on
-axis equal
-colorbar
-quiver(px,py,-Ex,-Ey)
+% hold on
+% axis equal
+% colorbar
+% quiver(px,py,-Ex,-Ey)
 
-output = [Ex(1,1),Ey(1,1)];
+
+gx = Ex(1,1);
+gy = Ey(1,1);
 end

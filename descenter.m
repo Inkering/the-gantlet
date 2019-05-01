@@ -1,33 +1,33 @@
 
-r = [1;-1];
-f = x.*y-x.^2-y.^2-2.*x-2.*y+4;
+% r = [1;-1];
+% f = x.*y-x.^2-y.^2-2.*x-2.*y+4;
 
-plsplot(r,f)
-plsascend(r, f)
-
-function output = plsplot(r,f)
 % plots a ascent
+r = [-0.65;-0.5];
 [x,y] = meshgrid(-3:.01:1, -3:.01:1);
-contour(x,y,f)
-hold on;
+f = x.*y-x.^2-y.^2-2.*x-2.*y+4;
+% contour(x,y,f)
+% hold on;
 plot(r(1), r(2),'o')
-end
-
-function output = plsascend(r, f)
+hold on
 % performs an ascent, locking function
 % in order to make it a descent, go the opposite way!
 
 % setup a publisher
 % pub = rospublisher('/raw_vel');
-message = rosmessage(pub);   
+% message = rosmessage(pub);   
 
 % find our gradient and scale
-[gx,gy] = gradient(f);
-grad = 100 .* [gx(round(r(2),2)*100+301, round(r(1),2)*100+301);
-               gy(round(r(2),2)*100+301, round(r(1),2)*100+301)];
+% [gx,gy] = gradient(f);
+% grad = 100 .* [-gx(round(r(2),2)*100+301, round(r(1),2)*100+301);
+%                -gy(round(r(2),2)*100+301, round(r(1),2)*100+301)];
+xp = round(r(2),2)*100+301;
+yp = round(r(1),2)*100+301;
+[gx, gy] = gradGenerator(xp, yp);
+grad = 100 .* [gx; gy];
 lambda = .25; % feet
 delta = .99; % current delta
-tolerance = 0.09; % gradient norm tolerance
+tolerance = 10; % gradient norm tolerance
 orientation = [0;1]; %initial orientation
 
 % calculate current angle change necessary
@@ -38,18 +38,20 @@ orientation = grad./norm(grad);
 time = 2*angle/(pi / 2);
 % message.Data = [-.1,.1];
 % send(pub, message);
-pause(time);
+% pause(time);
 % message.Data = [0,0];
 % send(pub,message);
 
 % stop when the norm of the gradient is greater than tolerance
+norm(grad)
+
 while norm(grad) > tolerance
     norm(grad)
     %move distance lambda along gradient
     time = (lambda/3.281)/0.1;
 %     message.Data = [.1,.1];
 %     send(pub, message);
-    pause(time);
+%     pause(time);
 %     message.Data = [0,0];
 %     send(pub,message);
     
@@ -80,5 +82,3 @@ end
 % stop moving, we're done!
 % message.Data = [0,0];
 % send(pub,message);
-
-end
