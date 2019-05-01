@@ -11,8 +11,29 @@ xlabel('x position (meters)');
 ylabel('y position (meters)');
 
 clearvars -except x y
-[A, B, bestTestLine] = RANSAC(x,y,0.05,100);
-plot(x, bestTestLine, 'r*')
+[A, B, bestTestLine, outliers] = RANSAC(x,y,0.05,100);
+p = polyfit([A(1) B(1)], [A(2) B(2)], 1);
+testline = polyval(p, x);
+plot(x, testline, 'r*')
+
+for i = 1:4
+    x = outliers(:,1)
+    y = outliers(:,2)
+
+    [A, B, bestTestLine, outliers] = RANSAC(x,y,0.05,100);
+    p = polyfit([A(1) B(1)], [A(2) B(2)], 1);
+    testline = polyval(p, x);
+    plot(x, testline, 'r*')
+end
+
+axis equal
+
+
+
+
+
+
+
 legend('Dataset', 'RANSAC Fit Line')
 
 
@@ -21,7 +42,7 @@ legend('Dataset', 'RANSAC Fit Line')
 
 
 
-function [A, B, bestTestLine] = RANSAC(x,y,d,n)
+function [A, B, bestTestLine, outliers] = RANSAC(x,y,d,n)
 points = [x y];
 
 bestInliersSoFar = 0;
@@ -42,18 +63,24 @@ for i = 1:n
     Nhat = cross(That,Khat);
     
     inliers = 0;
+    outliers = [];
     % Test every point with this fit line
     for j = 1:length(points)
         r = horzcat(points(j,:) - A, 0);
         dist = dot(r,Nhat);
-        if abs(dist) <= d, inliers = inliers + 1;, end
+        if abs(dist) <= d
+            inliers = inliers + 1;
+        else
+            outliers = vertcat(outliers, points(j,:));
+        end
     end
     
     if inliers > bestInliersSoFar
         bestPoint1SoFar = A;
         bestPoint2SoFar = B;
         bestTestLineSoFar = testline;
-        bestInliersSoFar = inliers;
+        bestInliersSoFar = inliers
+        bestOutliersSoFar = outliers;
     end
     
     axis([min(x) max(x) min(y) max(y)]);
@@ -63,6 +90,7 @@ end
 bestTestLine = bestTestLineSoFar;
 A = bestPoint1SoFar;
 B = bestPoint2SoFar;
+outliers = bestOutliersSoFar;
 end
 
 
