@@ -22,6 +22,19 @@ plot(x, pcay, 'r')
 
 clearvars -except x y
 
+[bestTestLine] = RANSAC(x,y,0.05,100)
+
+plot(x, bestTestLine, 'r*')
+
+legend('Dataset', 'Linear Regression', 'PCA Fit', 'Fit Lines Tested', 'RANSAC Fit Line')
+
+
+
+
+
+
+
+function [bestTestLine] = RANSAC(x,y,d,trials)
 points = [x y];
 
 n = 100;
@@ -97,10 +110,10 @@ for i = 1:n
     
 %     pause(1)
 end
+bestTestLine = bestTestLineSoFar
+end
 
-plot(x, testline, 'cyan')
-plot(x, bestTestLineSoFar, 'r*')
 
-plot(bestMatchedPoints(:,1), bestMatchedPoints(:,2), 'gs')
 
-legend('Dataset', 'Linear Regression', 'PCA Fit', 'Fit Lines Tested', 'RANSAC Fit Line')
+
+
