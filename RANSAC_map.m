@@ -26,7 +26,7 @@ clearvars -except x y
 
 plot(x, bestTestLine, 'r*')
 
-legend('Dataset', 'Linear Regression', 'PCA Fit', 'Fit Lines Tested', 'RANSAC Fit Line')
+legend('Dataset', 'Linear Regression', 'PCA Fit', 'RANSAC Fit Line')
 
 
 
@@ -34,17 +34,11 @@ legend('Dataset', 'Linear Regression', 'PCA Fit', 'Fit Lines Tested', 'RANSAC Fi
 
 
 
-function [bestTestLine] = RANSAC(x,y,d,trials)
+function [bestTestLine] = RANSAC(x,y,d,n)
 points = [x y];
 
-n = 100;
-d = 0.05;
-
 bestInliersSoFar = 0;
-bestPoint1SoFar = [0 0];
-bestPoint2SoFar = [0 0];
 bestTestLineSoFar = [];
-bestMatchedPoints = [];
 
 % For each point pair
 for i = 1:n
@@ -56,17 +50,6 @@ for i = 1:n
     % Find and plot the line between them
     p = polyfit([point1(1) point2(1)], [point1(2) point2(2)], 1);
     testline = polyval(p, x);
-    
-%     plot(x, testline, 'cyan', 'HandleVisibility', 'off')
-    
-    % Plot the endpoints in cyan
-    plot(point1(1), point1(2), 'cyano', 'HandleVisibility', 'off')
-    plot(point2(1), point2(2), 'cyano', 'HandleVisibility', 'off')
-    
-    % Find the tangent vector
-    That = (point2 - point1) ./ vecnorm(point2 - point1);
-    % Find the normal vector
-    Nhat = ([-That(2) That(1)]);
     
     A = point1;
     B = point2;
