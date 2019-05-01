@@ -30,12 +30,44 @@ xp = round(r(1),2);
 yp = round(r(2),2);
 [gx, gy] = gradGenerator(xp,yp)
 grad = 30.*[-gx;-gy]
-quiver(xp,yp, grad(1),grad(2))
+% quiver(xp,yp, grad(1),grad(2))
 
-r = [1.5;2];
-xp = round(r(1),2);
-yp = round(r(2),2);
-[gx, gy] = gradGenerator(xp,yp)
-grad = 30.*[-gx;-gy]
-quiver(xp,yp, grad(1),grad(2))
+% r = [1.5;2];
+% xp = round(r(1),2);
+% yp = round(r(2),2);
+% [gx, gy] = gradGenerator(xp,yp)
+% grad = 30.*[-gx;-gy]
+% quiver(xp,yp, grad(1),grad(2))
 
+lambda = .25; % feet
+delta = .99; % current delta
+tolerance = .63; % gradient norm tolerance
+orientation = [0;1]; %initial orientation
+
+angle = acos(dot(orientation, grad)./norm(grad));
+orientation = grad./norm(grad);
+
+time = 2*angle/(pi / 2);
+
+norm(grad)
+count = 1;
+
+while norm(grad) > tolerance
+    if count < 10
+        time = (lambda/3.281)/0.1;
+        r = r + lambda*grad./norm(grad); % does this work?
+        lambda = lambda*delta;
+        xp = round(r(1),2);
+        yp = round(r(2),2);
+        [gx, gy] = gradGenerator(xp,yp);
+        grad = 30.*[-gx;-gy];
+        norm(grad)
+        angle = acos(dot(orientation, grad)./norm(grad));
+        orientation = grad./norm(grad);
+        time = 2*angle/1.5748;
+        plot(r(1), r(2),'o')
+        count = count+1;
+    else
+        break
+    end
+end
