@@ -1,7 +1,7 @@
-figure(1), clf
+figure(1)
 
 % choose initial point
-r = [0.5;0.5];
+r = [1;1.5];
 
 % generate the surface with lines and such
 plot(r(1), r(2),'o')
@@ -33,23 +33,23 @@ end
 
 % visualize contour and gradient plot of surface in advance
 % (entirely for pretty plots)
-contour3(px,py,V);
+contour3(px,py,V)
 [Ex,Ey] = gradient(V);
 axis equal
 hold on
 colorbar
-quiver(px,py,-Ex,-Ey);
+quiver(px,py,-Ex,-Ey)
 
 % find the gradient at initial pt
 xp = round(r(1),2);
 yp = round(r(2),2);
 [gx, gy] = gradGenerator(xp,yp);
-grad = 30.*[-gx;-gy]
+grad = 30.*[-gx;-gy];
 
 
 lambda = .25; % feet
 delta = .99; % current delta
-tolerance = .1; % gradient norm tolerance
+tolerance = .63; % gradient norm tolerance
 orientation = [0;1]; %initial orientation
 
 % calculate desired angle
@@ -57,10 +57,8 @@ angle = acos(dot(orientation, grad)./norm(grad));
 orientation = grad./norm(grad);
 time = 2*angle/(pi / 2);
 
-norm(grad);
+norm(grad)
 count = 1;
-
-disp('gradient time')
 
 while norm(grad) > tolerance
     if count < 10
@@ -73,13 +71,13 @@ while norm(grad) > tolerance
         yp = round(r(2),2);
         [gx, gy] = gradGenerator(xp,yp);
         grad = 30.*[-gx;-gy];
-        norm(grad);
+        norm(grad)
         angle = acos(dot(orientation, grad)./norm(grad));
         orientation = grad./norm(grad);
         
         time = 2*angle/1.5748;
         
-        plot(r(1), r(2),'o');
+        plot(r(1), r(2),'o')
         count = count+1;
     else
         break
