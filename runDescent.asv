@@ -1,3 +1,6 @@
+pub = rospublisher('/raw_vel');
+message = rosmessage(pub); 
+
 r = [1;1.5];
 
 plot(r(1), r(2),'o')
@@ -30,14 +33,6 @@ xp = round(r(1),2);
 yp = round(r(2),2);
 [gx, gy] = gradGenerator(xp,yp)
 grad = 30.*[-gx;-gy]
-% quiver(xp,yp, grad(1),grad(2))
-
-% r = [1.5;2];
-% xp = round(r(1),2);
-% yp = round(r(2),2);
-% [gx, gy] = gradGenerator(xp,yp)
-% grad = 30.*[-gx;-gy]
-% quiver(xp,yp, grad(1),grad(2))
 
 lambda = .25; % feet
 delta = .99; % current delta
@@ -47,8 +42,15 @@ orientation = [0;1]; %initial orientation
 angle = acos(dot(orientation, grad)./norm(grad));
 orientation = grad./norm(grad);
 
+% rotate to the correct initial angle
 time = 2*angle/(pi / 2);
+message.Data = [-.1,.1];  
+send(pub, message);
+pause(time);
+message.Data = [0,0];
+send(pub,message);
 
+% initialize a counter and log current grad
 norm(grad)
 count = 1;
 
