@@ -1,5 +1,5 @@
 %% RANSAC Implementation
-clear;
+clear;rng(1);
 load('allRoomDataCleaned.mat');
 x = data(1,:)';
 y = data(2,:)';
@@ -11,21 +11,24 @@ xlabel('x position (meters)');
 ylabel('y position (meters)');
 
 clearvars -except x y
+tic
 [A, B, bestTestLine, outliers] = RANSAC(x,y,0.05,100);
 p = polyfit([A(1) B(1)], [A(2) B(2)], 1);
 testline = polyval(p, x);
 plot(x, testline, 'r*')
 
-for i = 1:4
+for i = 1:6
     x = outliers(:,1)
     y = outliers(:,2)
 
-    [A, B, bestTestLine, outliers] = RANSAC(x,y,0.05,100);
+    [A, B, bestTestLine, outliers, endA, endB] = RANSAC(x,y,0.1,20);
     p = polyfit([A(1) B(1)], [A(2) B(2)], 1);
     testline = polyval(p, x);
     plot(x, testline, 'r*')
 end
+toc
 
+ylim([-1 3])
 axis equal
 
 
@@ -42,11 +45,12 @@ legend('Dataset', 'RANSAC Fit Line')
 
 
 
-function [A, B, bestTestLine, outliers] = RANSAC(x,y,d,n)
+function [A, B, bestTestLine, outliers, endA, endB] = RANSAC(x,y,d,n)
 points = [x y];
 
 bestInliersSoFar = 0;
 bestTestLineSoFar = [];
+bestInlierPointsSoFar = [];
 
 % For each point pair
 for i = 1:n
@@ -70,6 +74,7 @@ for i = 1:n
         dist = dot(r,Nhat);
         if abs(dist) <= d
             inliers = inliers + 1;
+            
         else
             outliers = vertcat(outliers, points(j,:));
         end
@@ -79,14 +84,13 @@ for i = 1:n
         bestPoint1SoFar = A;
         bestPoint2SoFar = B;
         bestTestLineSoFar = testline;
-        bestInliersSoFar = inliers
+        bestInliersSoFar = inliers;
         bestOutliersSoFar = outliers;
     end
-    
-    axis([min(x) max(x) min(y) max(y)]);
-    
-%     pause(1)
 end
+sort(bestInliersSoFar)
+endA = 0;
+endB = 0;
 bestTestLine = bestTestLineSoFar;
 A = bestPoint1SoFar;
 B = bestPoint2SoFar;
