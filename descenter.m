@@ -27,7 +27,7 @@ yp = round(r(1),2)*100+301;
 grad = 100 .* [gx; gy];
 lambda = .25; % feet
 delta = .99; % current delta
-tolerance = 10; % gradient norm tolerance
+tolerance = .01; % gradient norm tolerance
 orientation = [0;1]; %initial orientation
 
 % calculate current angle change necessary
@@ -36,7 +36,7 @@ orientation = grad./norm(grad);
 
 % perform initial rotation
 time = 2*angle/(pi / 2);
-% message.Data = [-.1,.1];
+% message.Data = [-.1,.1];  
 % send(pub, message);
 % pause(time);
 % message.Data = [0,0];
