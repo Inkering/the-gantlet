@@ -11,11 +11,8 @@ xlabel('x position (meters)');
 ylabel('y position (meters)');
 
 clearvars -except x y
-
-[bestTestLine] = RANSAC(x,y,0.05,100);
-
+[A, B, bestTestLine] = RANSAC(x,y,0.05,100);
 plot(x, bestTestLine, 'r*')
-
 legend('Dataset', 'RANSAC Fit Line')
 
 
@@ -24,7 +21,7 @@ legend('Dataset', 'RANSAC Fit Line')
 
 
 
-function [bestTestLine] = RANSAC(x,y,d,n)
+function [A, B, bestTestLine] = RANSAC(x,y,d,n)
 points = [x y];
 
 bestInliersSoFar = 0;
@@ -32,7 +29,6 @@ bestTestLineSoFar = [];
 
 % For each point pair
 for i = 1:n
-    matchedPoints = [];
     % Randomly select the points
     A = points(randi([1, length(points)]),:);
     B = points(randi([1, length(points)]),:);
@@ -46,16 +42,11 @@ for i = 1:n
     Nhat = cross(That,Khat);
     
     inliers = 0;
-    
     % Test every point with this fit line
     for j = 1:length(points)
         r = horzcat(points(j,:) - A, 0);
         dist = dot(r,Nhat);
-        
-        if abs(dist) <= d
-            inliers = inliers + 1;
-            matchedPoints(end+1,:) = points(j,:);
-        end
+        if abs(dist) <= d, inliers = inliers + 1;, end
     end
     
     if inliers > bestInliersSoFar
@@ -63,7 +54,6 @@ for i = 1:n
         bestPoint2SoFar = B;
         bestTestLineSoFar = testline;
         bestInliersSoFar = inliers;
-        disp(inliers)
     end
     
     axis([min(x) max(x) min(y) max(y)]);
@@ -71,6 +61,8 @@ for i = 1:n
 %     pause(1)
 end
 bestTestLine = bestTestLineSoFar;
+A = bestPoint1SoFar;
+B = bestPoint2SoFar;
 end
 
 
