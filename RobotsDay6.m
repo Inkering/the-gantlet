@@ -1,10 +1,12 @@
 %% RANSAC Implementation
 clear;
-load('scan4.mat');
-r_clean = nonzeros(r);
-theta_clean = theta;
-theta_clean(~r) = [];
-[x, y] = pol2cart(deg2rad(theta_clean), r_clean);
+load('allRoomData.mat');
+% r_clean = nonzeros(r);
+% theta_clean = theta;
+% theta_clean(~r) = [];
+% [x, y] = pol2cart(deg2rad(theta_clean), r_clean);
+x = data(1,:)';
+y = data(2,:)';
 p = polyfit(x, y, 1)
 yp = polyval(p, x);
 figure(1);clf;
@@ -101,7 +103,7 @@ for i = 1:n
 end
 
 plot(x, testline, 'cyan')
-plot(x, testline, 'r*')
+plot(x, bestTestLineSoFar, 'r*')
 
 plot(bestMatchedPoints(:,1), bestMatchedPoints(:,2), 'gs')
 
