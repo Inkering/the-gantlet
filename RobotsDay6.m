@@ -1,10 +1,8 @@
 %% RANSAC Implementation
 clear;
-load('scan4.mat');
-r_clean = nonzeros(r);
-theta_clean = theta;
-theta_clean(~r) = [];
-[x, y] = pol2cart(deg2rad(theta_clean), r_clean);
+load('allRoomDataCleaned.mat');
+x = data(1,:)';
+y = data(2,:)';
 p = polyfit(x, y, 1)
 yp = polyval(p, x);
 figure(1);clf;
@@ -26,8 +24,8 @@ clearvars -except x y
 
 points = [x y];
 
-n = 8;
-d = 0.1;
+n = 100;
+d = 0.05;
 
 bestInliersSoFar = 0;
 bestPoint1SoFar = [0 0];
@@ -46,7 +44,7 @@ for i = 1:n
     p = polyfit([point1(1) point2(1)], [point1(2) point2(2)], 1);
     testline = polyval(p, x);
     
-    plot(x, testline, 'cyan', 'HandleVisibility', 'off')
+%     plot(x, testline, 'cyan', 'HandleVisibility', 'off')
     
     % Plot the endpoints in cyan
     plot(point1(1), point1(2), 'cyano', 'HandleVisibility', 'off')
