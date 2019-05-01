@@ -1,5 +1,5 @@
 %% RANSAC Implementation
-clear;
+clear;rng(1);
 load('allRoomDataCleaned.mat');
 x = data(1,:)';
 y = data(2,:)';
@@ -17,37 +17,28 @@ tic
 % plot(inliers(:,1), inliers(:,2), 'ks')
 
 p = polyfit([A(1) B(1)], [A(2) B(2)], 1);
-% testline = polyval(p, x);
+testline = polyval(p, x);
 
-lengths = vecnorm(inliers' - [10; 10]);
+lengths = vecnorm(inliers');
 [~, ia] = min(lengths);
 [~, ib] = max(lengths);
 end1 = inliers(ia,:);
 end2 = inliers(ib,:);
+
 line = [end1; end2];
 plot(line(:,1), line(:,2), 'g', 'LineWidth', 5)
 
 
-% plot(x, testline, 'ro')
+plot(x, testline, 'ro')
 
 for i = 1:6
     x = outliers(:,1)
     y = outliers(:,2)
 
     [A, B, bestTestLine, outliers, inliers] = RANSAC(x,y,0.1,20);
-%     p = polyfit([A(1) B(1)], [A(2) B(2)], 1);
-%     testline = polyval(p, x);
-%     plot(x, testline, 'r-')
-
-
-    lengths = vecnorm(inliers' - [10; 10]);
-    [~, ia] = min(lengths);
-    [~, ib] = max(lengths);
-    end1 = inliers(ia,:);
-    end2 = inliers(ib,:);
-    line = [end1; end2];
-    plot(line(:,1), line(:,2), 'g', 'LineWidth', 5)
-
+    p = polyfit([A(1) B(1)], [A(2) B(2)], 1);
+    testline = polyval(p, x);
+    plot(x, testline, 'r-')
 end
 toc
 
