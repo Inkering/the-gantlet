@@ -3,12 +3,22 @@ clear;
 load('allRoomDataCleaned.mat');
 x = data(1,:)';
 y = data(2,:)';
+p = polyfit(x, y, 1);
+yp = polyval(p, x);
 figure(1);clf;
 plot(x,y, 'o');hold on;
+plot(x, yp, 'g-');
 axis equal;
 title('Linear Regression Fit Line (Scan 4)');
 xlabel('x position (meters)');
 ylabel('y position (meters)');
+
+
+coefficients = pca([x y]);
+m = coefficients(2,1) / coefficients(1,1);
+b = mean(y) - m * mean(x);
+pcay = polyval([m b], x);
+plot(x, pcay, 'r')
 
 clearvars -except x y
 
@@ -16,7 +26,7 @@ clearvars -except x y
 
 plot(x, bestTestLine, 'r*')
 
-legend('Dataset', 'RANSAC Fit Line')
+legend('Dataset', 'Linear Regression', 'PCA Fit', 'RANSAC Fit Line')
 
 
 
