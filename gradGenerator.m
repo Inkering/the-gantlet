@@ -17,7 +17,8 @@ for i=1:xlim
           dV6 = @(x0)line(x0, 0.01,0,2.5);
           dV7 = @(x0)line(x0, -1,0,0);
           dV8 = @(x0)line(x0, 1000,2,0);
-          V(i,j) = integral(dV5,0.2,-0.2) + 2*integral(dV4,0.2,-0.2) + integral(dV3,4,-4) + integral(dV6,4,-4) + integral(dV7,4,-4)./3 + 6*integral(dV8,4,-4) + circle(1.75,2.25);
+%           V(i,j) = integral(dV5,0.2,-0.2) + 2*integral(dV4,0.2,-0.2) + integral(dV3,4,-4) + integral(dV6,4,-4) + integral(dV7,4,-4)./3 + 6*integral(dV8,4,-4) + circle(1.75,2.25);
+          V(i,j) = circle(1.75,2.25);
     end
 end
 
