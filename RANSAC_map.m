@@ -5,19 +5,27 @@ x = data(1,:)';
 y = data(2,:)';
 
 size(x)
+size(y)
 
-points = [x y];
 
-xkeep = find(x < 0.9 | x > 1.2);
-ykeep = find(y < 1.65 | y > 1.9);
-tokeep = intersect(xkeep, ykeep);
+toremove = [];
+for i = 1:1:length(x)
+    if(x(i) > 0.9)
+        if(x(i) < 1.2)
+            if(y(i) > 1.7)
+                if(y(i) < 1.9)
+                    toremove = vertcat(toremove, i);
+                end
+            end
+        end
+    end
+end
 
-points = points(tokeep,:);
-x = points(:,1);
-y = points(:,2);
+x(toremove) = [];
+y(toremove) = [];
 
 size(x)
-
+size(y)
 
 figure(1);clf;
 plot(x,y, '.');hold on;
@@ -46,11 +54,11 @@ plot(line(:,1), line(:,2), 'g', 'LineWidth', 5)
 
 % plot(x, testline, 'ro')
 
-for i = 1:5
+for i = 1:6
     x = outliers(:,1);
     y = outliers(:,2);
 
-    [A, B, bestTestLine, outliers, inliers] = RANSAC(x,y,0.1,20);
+    [A, B, bestTestLine, outliers, inliers] = RANSAC(x,y,0.05,20);
 
     lengths = vecnorm(inliers' - [10; 10]);
     [~, ia] = min(lengths);
@@ -68,7 +76,7 @@ end
 x = outliers(:,1);
 y = outliers(:,2);
 
-[A, B, bestTestLine, outliers, inliers] = RANSAC(x,y,0.1,20);
+[A, B, bestTestLine, outliers, inliers] = RANSAC(x,y,0.05,20);
 
 lengths = vecnorm(inliers' - [10; 10]);
 [~, ia] = min(lengths);

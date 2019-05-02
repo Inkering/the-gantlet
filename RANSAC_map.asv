@@ -5,15 +5,21 @@ x = data(1,:)';
 y = data(2,:)';
 
 size(x)
+size(y)
 
-points = [x y];
 
-points = points(find((x < 0.9 | x > 1.2) & (y < 1.65 | y > 1.9)),:);
-x = points(:,1);
-y = points(:,2);
+toremove = [];
+for i = 1:1:length(x)
+    if(x(i) > 0.9)
+        
+    end
+end
+
+size(toremove)
+
 
 size(x)
-
+size(y)
 
 figure(1);clf;
 plot(x,y, '.');hold on;
