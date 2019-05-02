@@ -1,6 +1,6 @@
 %% RANSAC Implementation
 clear;rng(3);
-load('allRoomDataCleaned.mat');
+load('oneScanData.mat');
 x = data(1,:)';
 y = data(2,:)';
 
@@ -55,7 +55,7 @@ plot(line(:,1), line(:,2), 'g', 'LineWidth', 5)
 % plot(x, testline, 'ro')
 totalInliers = 100;
     
-while(totalInliers > 20)
+while(totalInliers > 5)
     x = outliers(:,1);
     y = outliers(:,2);
 
@@ -70,23 +70,6 @@ while(totalInliers > 20)
     plot(line(:,1), line(:,2), 'g', 'LineWidth', 5)
 
 end
-
-
-
-
-x = outliers(:,1);
-y = outliers(:,2);
-
-[A, B, bestTestLine, outliers, inliers] = RANSAC(x,y,0.05,20);
-
-lengths = vecnorm(inliers' - [10; 10]);
-[~, ia] = min(lengths);
-[~, ib] = max(lengths);
-end1 = inliers(ia,:);
-end2 = inliers(ib,:);
-line = [end1; end2];
-plot(line(:,1), line(:,2), 'r', 'LineWidth', 5)
-plot(inliers(:,1), inliers(:,2), 'ks')
 
 
 
