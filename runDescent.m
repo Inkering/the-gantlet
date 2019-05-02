@@ -20,7 +20,8 @@ for i=1:xlim
         dV3 = @(x0)line(x0, 1,1.75,2.25);
         dV4 = @(x0)line(x0, -1,1.5,1);
         dV5 = @(x0)line(x0, 1,0.5,1.5);
-        V(i,j) = 2*integral(dV5,0.2,-0.2) + 2*integral(dV4,0.2,-0.2) + -2*integral(dV3,0.2,-0.2) + 0.5*integral(dV2,1,-1);
+%         V(i,j) = 2*integral(dV5,0.2,-0.2) + 2*integral(dV4,0.2,-0.2) + -2*integral(dV3,0.2,-0.2) + 0.5*integral(dV2,1,-1);
+        V(i,j) = circle(1.75,2.25);
     end
 end
 
