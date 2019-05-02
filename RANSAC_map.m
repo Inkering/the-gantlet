@@ -21,8 +21,8 @@ for i = 1:1:length(x)
     end
 end
 
-x(toremove) = [];
-y(toremove) = [];
+% x(toremove) = [];
+% y(toremove) = [];
 
 size(x)
 size(y)
@@ -53,12 +53,13 @@ plot(line(:,1), line(:,2), 'g', 'LineWidth', 5)
 
 
 % plot(x, testline, 'ro')
-
-for i = 1:6
+totalInliers = 100;
+    
+while(totalInliers > 20)
     x = outliers(:,1);
     y = outliers(:,2);
 
-    [A, B, bestTestLine, outliers, inliers] = RANSAC(x,y,0.05,20);
+    [A, B, bestTestLine, outliers, inliers, totalInliers] = RANSAC(x,y,0.05,20);
 
     lengths = vecnorm(inliers' - [10; 10]);
     [~, ia] = min(lengths);
@@ -110,7 +111,7 @@ legend('Dataset', 'RANSAC Fit Line')
 
 
 
-function [A, B, bestTestLine, outliers, inliers] = RANSAC(x,y,d,n)
+function [A, B, bestTestLine, outliers, inliers, totalInliers] = RANSAC(x,y,d,n)
 points = [x y];
 
 bestInliersSoFar = 0;
@@ -156,6 +157,7 @@ for i = 1:n
     end
 end
 inliers = rmoutliers(bestInlierPointsSoFar, 'median');
+totalInliers = length(inliers);
 endA = 0;
 endB = 0;
 bestTestLine = bestTestLineSoFar;
