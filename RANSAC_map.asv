@@ -1,7 +1,6 @@
 %% RANSAC Implementation
 clear;rng(3);
 load('allRoomDataCleaned.mat');
-
 x = data(1,:)';
 y = data(2,:)';
 
@@ -11,8 +10,8 @@ for i = 1:1:length(x)
         toremove=vertcat(toremove,i);
     end
 end
-
-data(toremove) = [];
+x(toremove) = [];
+y(toremove) = [];
 
 
 figure(1);clf;
@@ -49,7 +48,6 @@ ylabel('y position (meters)');
 
 function [line, outliers, inliers] = RANSAC(data,maxDist,trials)
 points = data;
-bestTestLineSoFar = [];
 bestInliers = [];
 Khat = [0;0;1];
 
@@ -68,35 +66,27 @@ for i = 1:trials
         r = horzcat(points(j,:) - A, 0);
         dist = dot(r,Nhat);
         if abs(dist) <= maxDist
-            inliers = vertcat(inliers, points(j,:));
+            inliers(j,:) = vertcat(inliers, points(j,:));
         else
             outliers = vertcat(outliers, points(j,:));
         end
     end
     
     if length(inliers) > length(bestInliers)
-        bestA = A;
-        bestB = B;
         bestOutliers = outliers;
         bestInliers = inliers;
+        size(inliers)
     end
 end
 inliers = rmoutliers(bestInliers, 'median');
-endA = 0;
-endB = 0;
-bestTestLine = bestTestLineSoFar;
-A = bestA;
-B = bestB;
 outliers = bestOutliers;
-
 maxIn = max(max(inliers));
 lengths = vecnorm(inliers' - [maxIn; maxIn]);
-[~, ia] = min(lengths);
-[~, ib] = max(lengths);
-end1 = inliers(ia,:);
-end2 = inliers(ib,:);
-line = [end1; end2];
-
+[~, A] = min(lengths);
+[~, B] = max(lengths);
+A = inliers(A,:);
+B = inliers(B,:);
+line = [A; B];
 
 end
 
