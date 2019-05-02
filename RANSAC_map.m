@@ -113,7 +113,7 @@ for i = 1:n
         bestInlierPointsSoFar = inlierPoints;
     end
 end
-inliers = bestInlierPointsSoFar;
+inliers = rmoutliers(bestInlierPointsSoFar);
 endA = 0;
 endB = 0;
 bestTestLine = bestTestLineSoFar;
