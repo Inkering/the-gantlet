@@ -1,12 +1,12 @@
 %% RANSAC Implementation
-clear;
+clear;rng(3);
 load('allRoomDataCleaned.mat');
 x = data(1,:)';
 y = data(2,:)';
 figure(1);clf;
 plot(x,y, '.');hold on;
 axis equal;
-title('Linear Regression Fit Line (Scan 4)');
+title('RANSAC Room Map');
 xlabel('x position (meters)');
 ylabel('y position (meters)');
 
@@ -31,8 +31,8 @@ plot(line(:,1), line(:,2), 'g', 'LineWidth', 5)
 % plot(x, testline, 'ro')
 
 for i = 1:6
-    x = outliers(:,1)
-    y = outliers(:,2)
+    x = outliers(:,1);
+    y = outliers(:,2);
 
     [A, B, bestTestLine, outliers, inliers] = RANSAC(x,y,0.1,20);
 %     p = polyfit([A(1) B(1)], [A(2) B(2)], 1);
