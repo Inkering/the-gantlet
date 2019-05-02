@@ -5,11 +5,14 @@ x = data(1,:)';
 y = data(2,:)';
 
 size(x)
-size(y)
 
 points = [x y];
 
-% points = points(find((y < 1.65 | y > 1.9)),:);
+xkeep = find(x < 0.9 | x > 1.2);
+ykeep = find(y < 1.65 | y > 1.9);
+tokeep = intersect(xkeep, ykeep);
+
+points = points(tokeep,:);
 x = points(:,1);
 y = points(:,2);
 
@@ -43,7 +46,7 @@ plot(line(:,1), line(:,2), 'g', 'LineWidth', 5)
 
 % plot(x, testline, 'ro')
 
-for i = 1:3
+for i = 1:5
     x = outliers(:,1);
     y = outliers(:,2);
 
