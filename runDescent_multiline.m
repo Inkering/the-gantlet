@@ -3,9 +3,11 @@
 % message = rosmessage(pub); 
 
 % goodpoints = [[0.23,0.23],[0.23,0.23];[0.23,0.23],[0.23,0.23]];
-A = [0,0];
-B = [1,1];
-goodpoints = [A,B];
+A = [1,1];
+B = [2,0.1];
+C = [1,1];
+D = [0,0];
+goodpoints = [A,B;D,C];
 
 numlines = size(goodpoints, 1);
 
@@ -13,8 +15,10 @@ numlines = size(goodpoints, 1);
 r = [1;1.5];
 
 % generate the surface with lines and such
-plot(r(1), r(2),'o')
+%plot(r(1), r(2),'o')
+plot(A(1), A(2),'o')
 hold on
+plot(B(1), B(2),'o')
 
 [px,py]=meshgrid(0:0.1:2,0:0.1:2.5);
 [xlim,ylim] = size(px);
@@ -22,16 +26,18 @@ V = zeros(xlim, ylim);
 
 for i=1:xlim
     for j=1:ylim
+        current = 0;
         for h=1:numlines
             theLine = goodpoints(h,:);
             vec = [theLine(1),theLine(2)] - [theLine(3),theLine(4)];
             startx = theLine(1);
             starty = theLine(2);
-            slope = vec(1) / vec(2);
+            slope = vec(2) ./ vec(1);
             line = @(x0,m,xi,yi) log(sqrt((px(i,j)-x0-xi).^2 + ((py(i,j)-(m.*x0)-yi).^2)));
             lined = @(x0)line(x0, slope,startx,starty);
-            V(i,j) = V(i,j) + integral(lined,0,norm(vec));
+            current = current - integral(lined,0,norm(vec(1)));
         end
+        V(i,j) =  current;
     end
 end
 
@@ -42,7 +48,7 @@ contour3(px,py,V)
 hold on
 axis equal
 colorbar
-quiver(px,py,Ex,Ey)
+%quiver(px,py,Ex,Ey)
 
 % find the gradient at initial pt
 xp = round(r(1),2);
