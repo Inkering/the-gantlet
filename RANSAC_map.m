@@ -1,8 +1,8 @@
 %% RANSAC Implementation
 clear;rng(3);
 load('allRoomDataCleaned.mat');
-x = data(1,:)';
-y = data(2,:)';
+x = data(1,:)' + 0.04;
+y = data(2,:)' + 0.29;
 
 toremove = [];
 for i = 1:1:length(x)
