@@ -24,9 +24,11 @@ for i=1:xlim
           dV8 = @(x0)line(x0, 1000,2,0);
 %           V(i,j) = integral(dV5,0.2,-0.2) + 2*integral(dV4,0.2,-0.2) + integral(dV3,4,-4) +...
 %               integral(dV6,4,-4) + integral(dV7,4,-4)./3 + 6*integral(dV8,4,-4) + circle(1.75,2.25);
-          V(i,j) = circle(1.75,2.25);
+          V(i,j) =   circle(1.75,2.25);
     end
 end
+
+
 
 % visualize contour and gradient plot of surface in advance
 % (entirely for pretty plots)
@@ -41,7 +43,7 @@ quiver(px,py,-Ex,-Ey,'k');
 xp = round(r(1),2);
 yp = round(r(2),2);
 [gx, gy] = gradGenerator(xp,yp);
-grad = 30.*[-gx;-gy]
+grad = 30.*[-gx;-gy];
 
 
 lambda = .25; % feet
@@ -69,7 +71,7 @@ while norm(grad) > tolerance
         xp = round(r(1),2);
         yp = round(r(2),2);
         [gx, gy] = gradGenerator(xp,yp);
-        grad = 30.*[-gx;-gy];
+        grad = 100.*[-gx;-gy];
         norm(grad);
         angle = acos(dot(orientation, grad)./norm(grad));
         orientation = grad./norm(grad);
