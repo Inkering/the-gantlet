@@ -12,7 +12,7 @@ The At-Point Gradient Descender is located in:
 The descending and plotting code is located in:  
 [Run Descent](runDescent_multiline.m)    
   
-The experimental visualization code is located in a live script in:
+The experimental visualization code is located in a live script in:  
 [Plotter](Visualization.mlx)  
   
 
