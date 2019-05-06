@@ -98,7 +98,7 @@ norm(grad)
 count = 1;
 
 while norm(grad) > tolerance
-    if count < 10
+    if count < 9
         % perform linear distance movement
         time = (lambda/3.281)/0.1;
 % %         message.Data = [.1,.1];
