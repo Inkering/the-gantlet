@@ -31,7 +31,7 @@ for i=1:xlim
             line = @(x0,m,xi,yi) log(sqrt((px(i,j)-x0-xi).^2 + ((py(i,j)-(m.*x0)-yi).^2)));
             circle = @(xi,yi) log(sqrt((px(i,j)-xi).^2 + ((py(i,j)-yi).^2)));
             lined = @(x0)line(x0, slope,startx,starty);
-            current = current - integral(lined,0,norm(vec(1)));
+            current = current - 0.1*integral(lined,0,norm(vec(1)));
         end
         V(i,j) = current + circle(cx, cy);
     end

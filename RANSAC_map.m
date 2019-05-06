@@ -1,5 +1,7 @@
 %% RANSAC Implementation
-clear;rng(3);
+function points = RANSAC_map()
+rng(3);
+points = [];
 load('allRoomDataCleaned.mat');
 x = data(1,:)' + 0.04;
 y = data(2,:)' + 0.29;
@@ -7,39 +9,42 @@ y = data(2,:)' + 0.29;
 toremove = [];
 for i = 1:1:length(x)
     if(data(1,i)>0.9 && data(1,i)<1.2 && data(2,i)>1.7 && data(2,i)<1.9)
-        toremove=vertcat(toremove,i);
+        toremove = vertcat(toremove,i);
+%     elseif(data(1,i) < 0.1)
+%         toremove = vertcat(toremove,i);
+%     elseif(data(1,i) > 1.5)
+%         toremove = vertcat(toremove,i);
     end
 end
 x(toremove) = [];
 y(toremove) = [];
 
-
-figure(1);clf;
 plot(x,y, '.');hold on;
 axis equal;
 ylim([-1 3]);
 
-clearvars -except x y
+% clearvars -except x y
 
-minInliers = 5;
+minInliers = 20;
 
-tic
 inliers = ones(minInliers,1);
 while(length(inliers) >= minInliers)
     [line, outliers, inliers] = RANSAC([x y],5/100,20);
     plot(line(:,1), line(:,2), 'g', 'LineWidth', 5)
+    disp(line)
+    points = vertcat(points, [line(1,:) line(2,:)]);
 
     x = outliers(:,1);
     y = outliers(:,2);
     
 end
-toc
 axis equal
 legend('Dataset', 'RANSAC Fit Line');
 
 title('RANSAC Room Map');
 xlabel('x position (meters)');
 ylabel('y position (meters)');
+end
 
 
 
