@@ -68,7 +68,7 @@ grad = 100*[-gx;-gy];
 disp("press key to run")
 pause() % wait for key
 
-lambda = .25; % feet
+lambda = .25; % meters
 delta = .99; % current delta
 tolerance = .01; % gradient norm tolerance
 orientation = [0;1]; %initial orientation
@@ -94,7 +94,7 @@ while norm(grad) > tolerance
     if count < 9
         disp(count)
         % perform linear distance movement
-        time = (lambda/3.28084)./(0.1);
+        time = lambda./(0.1);
         message.Data = [.1,.1];
         send(pub, message);
         pause(time);
