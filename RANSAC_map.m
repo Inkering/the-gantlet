@@ -21,7 +21,6 @@ y(toremove) = [];
 
 plot(x,y, '.');hold on;
 axis equal;
-ylim([-1 3]);
 
 % clearvars -except x y
 
