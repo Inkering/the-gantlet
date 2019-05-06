@@ -31,7 +31,6 @@ inliers = ones(minInliers,1);
 while(length(inliers) >= minInliers)
     [line, outliers, inliers] = RANSAC([x y],5/100,20);
     plot(line(:,1), line(:,2), 'g', 'LineWidth', 5)
-    disp(line)
     points = vertcat(points, [line(1,:) line(2,:)]);
 
     x = outliers(:,1);
