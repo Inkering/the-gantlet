@@ -1,4 +1,5 @@
 clf, figure(1), hold on
+
 % setup publisher / ros
 pub = rospublisher('/raw_vel');
 message = rosmessage(pub); 
@@ -6,17 +7,6 @@ message = rosmessage(pub);
 % log
 disp("Generating map")
 tic 
-% positions of line objects
-% % goodpoints = [[0.23,0.23],[0.23,0.23];[0.23,0.23],[0.23,0.23]];
-% A = [1.4,1.25];
-% B = [1.85,0.44];
-% C = [0.4,1.5];
-% D = [0.8,1.64];
-% E = [-1,1];
-% F = [1,-1];
-% goodpoints = [A,B;
-%               C,D;
-%               E,F];
 
 % bucket position
 cx = 1.21;
@@ -78,17 +68,18 @@ grad = 100*[-gx;-gy];
 disp("press key to run")
 pause() % wait for key
 
-lambda = .25; % feet
+lambda = .25; % meters
 delta = .99; % current delta
 tolerance = .01; % gradient norm tolerance
 orientation = [0;1]; %initial orientation
 
 % calculate desired angle
-angle = acos(dot(orientation, grad)./norm(grad))
+angle = acos(dot(orientation, grad)./norm(grad));
 orientation = grad./norm(grad);
 
 % rotate to the correct initial angle
-time = 2*angle/1.5748;
+% time = 2*angle/1.5748;
+time = angle  ./ ((0.1 + 0.1) / 0.25);
 message.Data = [.1,-.1];
 send(pub, message);
 pause(time);
@@ -96,20 +87,20 @@ message.Data = [0,0];
 send(pub,message);
 
 % initialize a counter and log current gradient length
-norm(grad)
+norm(grad);
 count = 1;
 
 while norm(grad) > tolerance
     if count < 9
+        disp(count)
         % perform linear distance movement
-        disp("run")
-        time = (lambda/3.281)/0.3
-        message.Data = [.3,.3];
+        time = lambda./(0.1);
+        message.Data = [.1,.1];
         send(pub, message);
-        pause(2*time);
+        pause(time);
         message.Data = [0,0];
         send(pub,message);
-        
+%         
         % update gradient, linear, and angle calculations
         r = r + lambda*grad./norm(grad);
         lambda = lambda*delta;
@@ -122,7 +113,8 @@ while norm(grad) > tolerance
         orientation = grad./norm(grad);
         
         % perform angular movement
-        time = 2*angle/1.5748;
+%         time = 2*angle/(pi ./ 2)
+        time = angle  ./ ((0.1 + 0.1) / 0.25);
         message.Data = [.1,-.1];
         send(pub, message);
         pause(time);
@@ -136,9 +128,9 @@ while norm(grad) > tolerance
         break
     end
 end
-
-toc
 disp("Its over!")
+toc
+
 % stop moving, we're done!
 message.Data = [0,0];
 send(pub,message);
